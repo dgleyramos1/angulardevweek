@@ -1,3 +1,5 @@
+import { OcorrenciaService } from './../service/ocorrencia.service copy 2';
+import { Ocorrencia } from './../model/ocorrencia';
 import { RegiaoService } from './../service/regiao.service';
 import { Faixaetaria } from './../model/faixaetaria';
 import { FaixaEtariaService } from './../service/faixa-etaria.service copy';
@@ -11,15 +13,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class OcorrenciasComponent implements OnInit {
 
+  ocorrencia_exame: Ocorrencia[] = [];
   regioes: Regiao[] = [];
   faixaetarias: Faixaetaria[] = [];
   constructor(
+    private ocorrenciaService: OcorrenciaService,
     private regiaoServico: RegiaoService,
     private faixaEtariaService: FaixaEtariaService
   ) { }
 
   ngOnInit(): void {
     this.listarRegioes();
+    this.listarOcorrencias();
     this.listarFaixas();
   }
 
@@ -27,8 +32,11 @@ export class OcorrenciasComponent implements OnInit {
       this.regioes = this.regiaoServico.listRegioes();
     
   }
+  private listarOcorrencias(): void{
+      this.ocorrencia_exame = this.ocorrenciaService.listOcorrencia();
+  }
 
   private listarFaixas(): void{ 
-      this.faixaetarias = this.faixaEtariaService.listRegioes();
+      this.faixaetarias = this.faixaEtariaService.listFaixaEtarias();
   }
 }
