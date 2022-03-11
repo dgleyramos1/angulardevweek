@@ -3,13 +3,13 @@ import { NgModule } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatSortModule } from '@angular/material/sort';
 import { OcorrenciasRoutingModule } from './ocorrencias-routing.module';
-import { RegiaoComponent } from './regiao/regiao.component';
+import { OcorrenciasComponent } from './ocorrencias/ocorrencias.component';
 
 
 
 @NgModule({
   declarations: [
-    RegiaoComponent
+    OcorrenciasComponent
   ],
   imports: [
     CommonModule,
