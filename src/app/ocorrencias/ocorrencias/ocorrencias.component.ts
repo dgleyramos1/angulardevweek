@@ -4,21 +4,25 @@ import { RegiaoService } from './../service/regiao.service';
 import { Faixaetaria } from './../model/faixaetaria';
 import { FaixaEtariaService } from './../service/faixa-etaria.service copy';
 import { Regiao } from '../model/regiao';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-ocorrencias',
   templateUrl: './ocorrencias.component.html',
   styleUrls: ['./ocorrencias.component.css']
 })
-export class OcorrenciasComponent implements OnInit {
+export class OcorrenciasComponent implements OnInit, OnDestroy {
 
   ocorrencia_exame: Ocorrencia[] = [];
   regioes: Regiao[] = [];
   faixaetarias: Faixaetaria[] = [];
+
+  readonly subscriptions = new Subscription();
+
   constructor(
     private ocorrenciaService: OcorrenciaService,
-    private regiaoServico: RegiaoService,
+    private regiaoService: RegiaoService,
     private faixaEtariaService: FaixaEtariaService
   ) { }
 
@@ -28,15 +32,32 @@ export class OcorrenciasComponent implements OnInit {
     this.listarFaixas();
   }
 
-  private listarRegioes(): void {
-      this.regioes = this.regiaoServico.listRegioes();
-    
-  }
-  private listarOcorrencias(): void{
-      this.ocorrencia_exame = this.ocorrenciaService.listOcorrencia();
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 
-  private listarFaixas(): void{ 
-      this.faixaetarias = this.faixaEtariaService.listFaixaEtarias();
+  private listarRegioes(): void {
+    const subscription = this.regiaoService.listRegioes().subscribe((regioes => {
+      this.regioes = regioes;
+    }));
+
+    this.subscriptions.add(subscription);
+  }
+
+  private listarOcorrencias(): void{
+    const subscriptionOcorrencias = this.ocorrenciaService.listOcorrencias().subscribe((
+        ocorrecias => {this.ocorrencia_exame = ocorrecias
+      }
+    ));
+
+    this.subscriptions.add(subscriptionOcorrencias);
+  }
+
+  private listarFaixas(): void{
+    const subscriptionFaixas = this.faixaEtariaService.listFaixaEtaria().subscribe(( 
+      faixa => {this.faixaetarias = faixa}
+    ));
+
+    this.subscriptions.add(subscriptionFaixas)
   }
 }

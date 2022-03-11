@@ -1,18 +1,20 @@
 import { Regiao } from './../model/regiao';
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RegiaoService {
 
-  constructor() { }
+  constructor(
+    private http: HttpClient,
+  ) { }
 
-  listRegioes(): Regiao[]{
-    return[
-      {id: 1, regiao: 'Norte', total_exames:1564},
-      {id: 2, regiao: 'Nordeste', total_exames:2500},
-      {id: 3, regiao: 'Sudeste', total_exames:3500}
-    ];
+  listRegioes(): Observable<Regiao[]> {
+    //const url = '/assets/regiao.json';
+    const url ="/api/regioes"
+    return this.http.get<Regiao[]>(url);
   }
 }
